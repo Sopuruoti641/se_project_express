@@ -11,7 +11,7 @@ const getItems = (req, res) => {
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
-  Item.create({ name, weather, imageUrl, owner })
+  Item.create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(ERROR.CREATED).send(item))
     .catch((err) => {
       console.log(err);
@@ -33,12 +33,24 @@ const deleteItem = (req, res) => {
           .status(ERROR.BAD_REQUEST)
           .send({ message: "You can only delete your own items." });
       }
-      return item.deleteOne().then(() => res.status(ERROR.NO_CONTENT).send());
+
+      return item
+        .deleteOne()
+        .then(() =>
+          res
+            .status(ERROR.OK)
+            .send({ message: "Item successfully deleted", item })
+        );
     })
     .catch((err) => {
       console.log(err);
       if (err.name === "DocumentNotFoundError") {
         return res.status(ERROR.NOT_FOUND).send({ message: "Item not found." });
+      }
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR.BAD_REQUEST)
+          .send({ message: "Invalid item ID format." });
       }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
@@ -60,6 +72,11 @@ const likeItem = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR.BAD_REQUEST)
+          .send({ message: "Invalid item ID format." });
+      }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
         .send({ message: err.message });
@@ -80,6 +97,11 @@ const dislikeItem = (req, res) => {
     })
     .catch((err) => {
       console.log(err);
+      if (err.name === "CastError") {
+        return res
+          .status(ERROR.BAD_REQUEST)
+          .send({ message: "Invalid item ID format." });
+      }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
         .send({ message: err.message });
