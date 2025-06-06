@@ -45,29 +45,4 @@ const getUser = (req, res) => {
     });
 };
 
-const updateUser = (req, res) => {
-  const { userId } = req.params;
-  const { imageURL } = req.params;
-
-  console.log(userId, imageURL);
-  User.findByIdAndUpdate(itemId, { $set: { imageURL } })
-    .orFail()
-    .then((item) => res.status(ERROR.OK).send({ data: item }))
-    .catch((err) => {
-      res.status(ERROR.INTERNAL_SERVER_ERROR).send({ message: err.message });
-    });
-};
-
-const deleteUser = (req, res) => {
-  const { userId } = req.params;
-
-  console.log(userId);
-  User.findByIdAndDelete(userId)
-    .orFail()
-    .then((user) => res.status(ERROR.NO_CONTENT).send(user))
-    .catch((err) => {
-      res.status(ERROR.INTERNAL_SERVER_ERROR).send({ message: err.message });
-    });
-};
-
-module.exports = { getUsers, createUser, getUser, updateUser, deleteUser };
+module.exports = { getUsers, createUser, getUser };
