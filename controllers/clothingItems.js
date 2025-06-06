@@ -11,7 +11,7 @@ const getItems = (req, res) => {
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
-  Item.create({ name, weather, imageUrl })
+  Item.create({ name, weather, imageUrl, owner })
     .then((item) => res.status(ERROR.CREATED).send(item))
     .catch((err) => {
       console.log(err);
