@@ -1,10 +1,15 @@
 const router = require("express").Router();
-const userRouter = require("./users");
-const itemRouter = require("./items");
 const ERROR = require("../controllers/errorStatus");
+const auth = require("../middleware/auth");
+const { createUser, login } = require("../controllers/users");
 
-router.use("/users", userRouter);
-router.use("/items", itemRouter);
+router.post("/signup", createUser);
+router.post("/signin", login);
+
+router.use(auth);
+
+router.use("/users", require("../middleware/auth"));
+router.use("/items", require("./items"));
 
 router.use((req, res) => {
   res.status(ERROR.NOT_FOUND).send({ message: "Route not found" });

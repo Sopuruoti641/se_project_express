@@ -30,7 +30,7 @@ const deleteItem = (req, res) => {
     .then((item) => {
       if (!item.owner.equals(req.user._id)) {
         return res
-          .status(ERROR.BAD_REQUEST)
+          .status(ERROR.FORBIDDEN)
           .send({ message: "You can only delete your own items." });
       }
 
