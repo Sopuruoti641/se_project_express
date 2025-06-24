@@ -13,7 +13,7 @@ mongoose
   .catch(console.error);
 
 app.use((req, res, next) => {
-  req.user = { _id: "665f8249fd4165d7c7dd82ae" };
+  req.user = { _id: "..." };
   next();
 });
 app.use(express.json());

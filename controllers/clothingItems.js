@@ -1,11 +1,15 @@
 const Item = require("../models/clothingItems");
 const ERROR = require("./errorStatus");
 
+const DEFAULT_SERVER_ERROR = "An error has occurred on the server.";
+
 const getItems = (req, res) => {
   Item.find({})
     .then((items) => res.status(ERROR.OK).send(items))
-    .catch((err) => {
-      res.status(ERROR.INTERNAL_SERVER_ERROR).send({ message: err.message });
+    .catch(() => {
+      res
+        .status(ERROR.INTERNAL_SERVER_ERROR)
+        .send({ message: DEFAULT_SERVER_ERROR });
     });
 };
 
@@ -16,11 +20,13 @@ const createItem = (req, res) => {
     .catch((err) => {
       console.log(err);
       if (err.name === "ValidationError") {
-        return res.status(ERROR.BAD_REQUEST).send({ message: err.message });
+        return res
+          .status(ERROR.BAD_REQUEST)
+          .send({ message: "Invalid item data provided." });
       }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: DEFAULT_SERVER_ERROR });
     });
 };
 
@@ -54,7 +60,7 @@ const deleteItem = (req, res) => {
       }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: DEFAULT_SERVER_ERROR });
     });
 };
 
@@ -79,7 +85,7 @@ const likeItem = (req, res) => {
       }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: DEFAULT_SERVER_ERROR });
     });
 };
 
@@ -104,7 +110,7 @@ const dislikeItem = (req, res) => {
       }
       return res
         .status(ERROR.INTERNAL_SERVER_ERROR)
-        .send({ message: err.message });
+        .send({ message: DEFAULT_SERVER_ERROR });
     });
 };
 
