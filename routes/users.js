@@ -7,8 +7,8 @@ const {
   updateUser,
 } = require("../controllers/users");
 
-router.get("/", getUsers);
-router.post("/", createUser);
+const auth = require("../middleware/auth");
+
 router.get("/me", getCurrentUser);
 router.patch("/me", updateUser);
 
