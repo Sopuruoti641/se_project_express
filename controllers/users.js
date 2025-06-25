@@ -4,17 +4,6 @@ const User = require("../models/user");
 const ERROR = require("./errorStatus");
 const { JWT_SECRET } = require("../utils/config");
 
-// const getUsers = (req, res) => {
-//   User.find({})
-//     .then((user) => res.status(ERROR.OK).send(user))
-//     .catch((err) => {
-//       console.log(err);
-//       return res
-//         .status(ERROR.INTERNAL_SERVER_ERROR)
-//         .send({ message: err.message });
-//     });
-// };
-
 const createUser = (req, res) => {
   const { email, password, name, avatar } = req.body;
 
@@ -41,18 +30,16 @@ const createUser = (req, res) => {
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res) =>
   User.findById(req.user._id)
-    .then((user) => {
-      if (!user) {
-        return res.status(ERROR.NOT_FOUND).send({ message: "User not found" });
-      }
-      return res.send(user);
-    })
+    .then((user) =>
+      user
+        ? res.send(user)
+        : res.status(ERROR.NOT_FOUND).send({ message: "User not found" })
+    )
     .catch((err) =>
       res.status(ERROR.INTERNAL_SERVER_ERROR).send({ message: err.message })
     );
-};
 
 const login = (req, res) => {
   const { email, password } = req.body;
@@ -63,7 +50,7 @@ const login = (req, res) => {
       .send({ message: "Email and password are required." });
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -82,6 +69,35 @@ const login = (req, res) => {
         .send({ message: "An error has occurred on the server." });
     });
 };
+
+// const login = (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return res
+//       .status(ERROR.BAD_REQUEST)
+//       .send({ message: "Email and password are required." });
+//   }
+
+//   User.findUserByCredentials(email, password)
+//     .then((user) => {
+//       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+//         expiresIn: "7d",
+//       });
+//       return res.send({ token });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       if (err.message === "Incorrect email or password") {
+//         return res
+//           .status(ERROR.UNAUTHORIZED)
+//           .send({ message: "Incorrect email or password" });
+//       }
+//       return res
+//         .status(ERROR.INTERNAL_SERVER_ERROR)
+//         .send({ message: "An error has occurred on the server." });
+//     });
+// };
 
 const updateUser = (req, res) => {
   const { name, avatar } = req.body;
@@ -107,4 +123,15 @@ const updateUser = (req, res) => {
     });
 };
 
-module.exports = { getUsers, createUser, getCurrentUser, login, updateUser };
+module.exports = { createUser, getCurrentUser, login, updateUser };
+
+// const getUsers = (req, res) => {
+//   User.find({})
+//     .then((user) => res.status(ERROR.OK).send(user))
+//     .catch((err) => {
+//       console.log(err);
+//       return res
+//         .status(ERROR.INTERNAL_SERVER_ERROR)
+//         .send({ message: err.message });
+//     });
+// };
