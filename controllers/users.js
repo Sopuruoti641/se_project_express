@@ -70,35 +70,6 @@ const login = (req, res) => {
     });
 };
 
-// const login = (req, res) => {
-//   const { email, password } = req.body;
-
-//   if (!email || !password) {
-//     return res
-//       .status(ERROR.BAD_REQUEST)
-//       .send({ message: "Email and password are required." });
-//   }
-
-//   User.findUserByCredentials(email, password)
-//     .then((user) => {
-//       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-//         expiresIn: "7d",
-//       });
-//       return res.send({ token });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       if (err.message === "Incorrect email or password") {
-//         return res
-//           .status(ERROR.UNAUTHORIZED)
-//           .send({ message: "Incorrect email or password" });
-//       }
-//       return res
-//         .status(ERROR.INTERNAL_SERVER_ERROR)
-//         .send({ message: "An error has occurred on the server." });
-//     });
-// };
-
 const updateUser = (req, res) => {
   const { name, avatar } = req.body;
 
@@ -133,5 +104,34 @@ module.exports = { createUser, getCurrentUser, login, updateUser };
 //       return res
 //         .status(ERROR.INTERNAL_SERVER_ERROR)
 //         .send({ message: err.message });
+//     });
+// };
+
+// const login = (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email || !password) {
+//     return res
+//       .status(ERROR.BAD_REQUEST)
+//       .send({ message: "Email and password are required." });
+//   }
+
+//   User.findUserByCredentials(email, password)
+//     .then((user) => {
+//       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+//         expiresIn: "7d",
+//       });
+//       return res.send({ token });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//       if (err.message === "Incorrect email or password") {
+//         return res
+//           .status(ERROR.UNAUTHORIZED)
+//           .send({ message: "Incorrect email or password" });
+//       }
+//       return res
+//         .status(ERROR.INTERNAL_SERVER_ERROR)
+//         .send({ message: "An error has occurred on the server." });
 //     });
 // };
