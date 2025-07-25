@@ -32,6 +32,7 @@ const createUser = (req, res) => {
 
 const getCurrentUser = (req, res) =>
   User.findById(req.user._id)
+    .orFail()
     .then((user) =>
       user
         ? res.send(user)
@@ -55,7 +56,15 @@ const login = (req, res) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      return res.send({ token });
+      return res.send({
+        token,
+        user: {
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
+          _id: user._id,
+        },
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -78,6 +87,7 @@ const updateUser = (req, res) => {
     { name, avatar },
     { new: true, runValidators: true }
   )
+    .orFail()
     .then((user) => {
       if (!user) {
         return res.status(ERROR.NOT_FOUND).send({ message: "User not found" });
