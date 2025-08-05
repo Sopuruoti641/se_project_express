@@ -1,8 +1,16 @@
-module.exports = (err, res, next) => {
+// module.exports = (err, res, next) => {
+//   console.error(err);
+//   const { statusCode = 500, message } = err;
+//   res.status(statusCode).send({
+//     message: statusCode === 500 ? "An error occurred on the server" : message,
+//   });
+//   return next();
+// };
+
+module.exports = (err, req, res, next) => {
   console.error(err);
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? "An error occurred on the server" : message,
   });
-  return next();
 };

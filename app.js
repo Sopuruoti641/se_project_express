@@ -5,8 +5,9 @@ const { celebrate, Joi } = require("celebrate");
 const { login, createUser } = require("./controllers/users");
 const mainRouter = require("./routes/index");
 const errorHandler = require("./middleware/error-handler");
-const { requestLogger, errorLogger } = require("./middleware/log");
+const { requestLogger, errorLogger } = require("./middleware/logger");
 const { errors } = require("celebrate");
+require("dotenv").config();
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -56,16 +57,30 @@ app.post(
   }),
   createUser
 );
-
-app.use(errors());
-app.use("/", mainRouter);
-
-app.use(errorHandler);
-
+// 1. Request logger should come BEFORE routes
 app.use(requestLogger);
 
+// 2. Routes go here
+app.use("/", mainRouter);
+
+// 3. Celebrate error handler (handles Joi validation errors)
+app.use(errors());
+
+// 4. Error logger (logs application errors)
 app.use(errorLogger);
+
+// 5. Centralized error handler (sends error response)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+// app.use(errors());
+// app.use("/", mainRouter);
+
+// app.use(errorHandler);
+
+// app.use(requestLogger);
+
+// app.use(errorLogger);

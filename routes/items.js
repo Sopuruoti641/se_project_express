@@ -9,12 +9,14 @@ const {
   dislikeItem,
 } = require("../controllers/clothingItems");
 
+// ✅ Public route — no auth
 router.get("/", getItems);
+
+// ✅ Apply auth to all routes after this line
 router.use(auth);
 
 router.post(
   "/",
-  auth,
   celebrate({
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30).required(),
@@ -27,7 +29,6 @@ router.post(
 
 router.delete(
   "/:itemId",
-  auth,
   celebrate({
     params: Joi.object().keys({
       itemId: Joi.string().length(24).hex().required(),
@@ -38,7 +39,6 @@ router.delete(
 
 router.put(
   "/:itemId/likes",
-  auth,
   celebrate({
     params: Joi.object().keys({
       itemId: Joi.string().length(24).hex().required(),
@@ -49,7 +49,6 @@ router.put(
 
 router.delete(
   "/:itemId/likes",
-  auth,
   celebrate({
     params: Joi.object().keys({
       itemId: Joi.string().length(24).hex().required(),

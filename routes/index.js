@@ -8,6 +8,9 @@ router.post("/signin", login);
 
 router.use("/users", auth, require("./users"));
 router.use("/items", auth, require("./items"));
+router.get("/", (req, res) => {
+  res.send({ message: "API is working" });
+});
 
 router.use((req, res) => {
   res.status(ERROR.NOT_FOUND).send({ message: "Route not found" });
