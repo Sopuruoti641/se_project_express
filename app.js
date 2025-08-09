@@ -57,30 +57,17 @@ app.post(
   }),
   createUser
 );
-// 1. Request logger should come BEFORE routes
+
 app.use(requestLogger);
 
-// 2. Routes go here
 app.use("/", mainRouter);
 
-// 3. Celebrate error handler (handles Joi validation errors)
 app.use(errors());
 
-// 4. Error logger (logs application errors)
 app.use(errorLogger);
 
-// 5. Centralized error handler (sends error response)
 app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
-// app.use(errors());
-// app.use("/", mainRouter);
-
-// app.use(errorHandler);
-
-// app.use(requestLogger);
-
-// app.use(errorLogger);
