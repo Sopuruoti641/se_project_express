@@ -8,7 +8,7 @@ const { JWT_SECRET } = require("../utils/config");
 const BadRequestError = require("../errors/bad-request-err");
 const NotFoundError = require("../errors/not-found-err");
 const UnauthorizedError = require("../errors/unauthorized-err");
-const ConflictError = require("../errors/ conflict-err");
+const ConflictError = require("../errors/conflict-err");
 
 const createUser = (req, res, next) => {
   const { email, password, name, avatar } = req.body;
@@ -109,7 +109,7 @@ const login = (req, res, next) => {
   //     .send({ message: "An error has occurred on the server." });
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { name, avatar } = req.body;
 
   User.findByIdAndUpdate(

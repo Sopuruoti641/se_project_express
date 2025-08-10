@@ -9,37 +9,37 @@ const validateURL = (value, helpers) => {
 };
 
 function clothingItemValidation() {
-  Joi.object().keys({
+  return Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    imageURL: Joi.string().required().url(),
+    imageURL: Joi.string().required().uri(),
   });
 }
 
 function newUserValidation() {
-  Joi.object().keys({
+  return Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    avatar: Joi.string().required().url(),
+    avatar: Joi.string().required().custom(validateURL),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   });
 }
 
 function userLoginValidation() {
-  Joi.object().keys({
+  return Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   });
 }
 
 function clothingItemIdValidation() {
-  Joi.object().keys({
-    itemId: Joi.string().required(),
+  return Joi.object().keys({
+    itemId: Joi.string().required().hex().length(24), // Assuming Mongo ObjectId
   });
 }
 
 module.exports.validateId = celebrate({
   params: Joi.object().keys({
-    // ...
+    itemId: Joi.string().required().hex().length(24),
   }),
 });
 

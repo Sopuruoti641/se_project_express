@@ -1,18 +1,16 @@
 const router = require("express").Router();
 const { celebrate, Joi } = require("celebrate");
 const auth = require("../middleware/auth");
+
 const {
-  getItems,
   createItem,
-  deleteItem,
+  getItems,
   likeItem,
+  deleteItem,
   dislikeItem,
 } = require("../controllers/clothingItems");
 
-// ✅ Public route — no auth
 router.get("/", getItems);
-
-// ✅ Apply auth to all routes after this line
 router.use(auth);
 
 router.post(

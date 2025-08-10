@@ -1,19 +1,58 @@
 const router = require("express").Router();
-const ERROR = require("../controllers/errorStatus");
+const { celebrate, Joi } = require("celebrate");
 const auth = require("../middleware/auth");
-const { createUser, login } = require("../controllers/users");
 
-router.post("/signup", createUser);
-router.post("/signin", login);
+const {
+  createItem,
+  getItems,
+  likeItem,
+  deleteItem,
+  dislikeItem,
+} = require("../controllers/clothingItems");
 
-router.use("/users", auth, require("./users"));
-router.use("/items", auth, require("./items"));
-router.get("/", (req, res) => {
-  res.send({ message: "API is working" });
-});
+router.get("/", getItems);
+router.use(auth);
 
-router.use((req, res) => {
-  res.status(ERROR.NOT_FOUND).send({ message: "Route not found" });
-});
+router.post(
+  "/",
+  celebrate({
+    body: Joi.object().keys({
+      name: Joi.string().min(2).max(30).required(),
+      weather: Joi.string().valid("hot", "warm", "cold").required(),
+      imageUrl: Joi.string().uri().required(),
+    }),
+  }),
+  createItem
+);
+
+router.delete(
+  "/:itemId",
+  celebrate({
+    params: Joi.object().keys({
+      itemId: Joi.string().length(24).hex().required(),
+    }),
+  }),
+  deleteItem
+);
+
+router.put(
+  "/:itemId/likes",
+  celebrate({
+    params: Joi.object().keys({
+      itemId: Joi.string().length(24).hex().required(),
+    }),
+  }),
+  likeItem
+);
+
+router.delete(
+  "/:itemId/likes",
+  celebrate({
+    params: Joi.object().keys({
+      itemId: Joi.string().length(24).hex().required(),
+    }),
+  }),
+  dislikeItem
+);
 
 module.exports = router;
