@@ -32,7 +32,7 @@ router.post(
 );
 
 // Protected routes
-router.use(auth);
+// router.use(auth);
 
 router.use("/items", itemsRouter);
 router.use("/users", usersRouter);

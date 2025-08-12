@@ -1,7 +1,8 @@
 const Item = require("../models/clothingItems");
 const BadRequestError = require("../errors/bad-request-err");
 const NotFoundError = require("../errors/not-found-err");
-const UnauthorizedError = require("../errors/unauthorized-err");
+// const UnauthorizedError = require("../errors/unauthorized-err");
+const ForbiddenError = require("../errors/forbidden-err");
 
 const getItems = (req, res, next) => {
   Item.find({})
@@ -26,7 +27,7 @@ const deleteItem = (req, res, next) => {
     .orFail(() => new NotFoundError("Item not found."))
     .then((item) => {
       if (!item.owner.equals(req.user._id)) {
-        throw new UnauthorizedError("You can only delete your own items.");
+        throw new ForbiddenError("You can only delete your own items.");
       }
       return item.deleteOne();
     })
