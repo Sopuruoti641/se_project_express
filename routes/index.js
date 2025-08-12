@@ -1,58 +1,40 @@
 const router = require("express").Router();
 const { celebrate, Joi } = require("celebrate");
+
 const auth = require("../middleware/auth");
+const itemsRouter = require("./items");
+const usersRouter = require("./users");
+const { createUser, login } = require("../controllers/users");
 
-const {
-  createItem,
-  getItems,
-  likeItem,
-  deleteItem,
-  dislikeItem,
-} = require("../controllers/clothingItems");
-
-router.get("/", getItems);
-router.use(auth);
-
+// Public routes (no auth)
 router.post(
-  "/",
+  "/signup",
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().min(2).max(30).required(),
-      weather: Joi.string().valid("hot", "warm", "cold").required(),
-      imageUrl: Joi.string().uri().required(),
+      name: Joi.string().min(2).max(30),
+      avatar: Joi.string().uri(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
     }),
   }),
-  createItem
+  createUser
 );
 
-router.delete(
-  "/:itemId",
+router.post(
+  "/signin",
   celebrate({
-    params: Joi.object().keys({
-      itemId: Joi.string().length(24).hex().required(),
+    body: Joi.object().keys({
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
     }),
   }),
-  deleteItem
+  login
 );
 
-router.put(
-  "/:itemId/likes",
-  celebrate({
-    params: Joi.object().keys({
-      itemId: Joi.string().length(24).hex().required(),
-    }),
-  }),
-  likeItem
-);
+// Protected routes
+router.use(auth);
 
-router.delete(
-  "/:itemId/likes",
-  celebrate({
-    params: Joi.object().keys({
-      itemId: Joi.string().length(24).hex().required(),
-    }),
-  }),
-  dislikeItem
-);
+router.use("/items", itemsRouter);
+router.use("/users", usersRouter);
 
 module.exports = router;
