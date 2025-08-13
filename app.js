@@ -16,12 +16,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db").then().catch();
 
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: false,
-  })
-);
+app.use(cors());
 
 app.use(requestLogger);
 
