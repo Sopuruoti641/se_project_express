@@ -1,3 +1,8 @@
+# PROBLEM
+
+I am unable to use my domain when pasted into the web browser "wtwr-web.home.kg".
+When I am in the dev tools is give me an error with the following " https://api.wtwr-web.home.kg/items' from origin 'https://wtwr-web.home.kg' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: The 'Access-Control-Allow-Origin' header has a value 'http://localhost:3000' that is not equal to the supplied origin. Have the server send the header with a valid value. "
+
 # WTWR (What to Wear?): Back End
 
 The back-end project is focused on creating a server for the WTWR application. You’ll gain a deeper understanding of how to work with databases, set up security and testing, and deploy web applications on a remote machine. The eventual goal is to create a server with an API and user authorization.
