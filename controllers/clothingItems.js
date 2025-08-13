@@ -1,10 +1,10 @@
-const clothingItem = require("../models/clothingItem");
-const BadRequestError = require("../utils/BadRequestError");
-const NotFoundError = require("../utils/NotFoundError");
-const ForbiddenError = require("../utils/ForbiddenError");
+const clothingItems = require("../models/clothingItems");
+const BadRequestError = require("../errors/bad-request-err");
+const NotFoundError = require("../errors/not-found-err");
+const ForbiddenError = require("../errors/forbidden-err");
 
 const getItems = (req, res, next) => {
-  clothingItem
+  clothingItems
     .find({})
     .then((items) => {
       res.send(items);
@@ -15,7 +15,7 @@ const getItems = (req, res, next) => {
 const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
 
-  clothingItem
+  clothingItems
     .create({ name, weather, imageUrl, owner: req.user._id })
     .then((item) => res.status(201).send(item))
     .catch((err) => {
@@ -31,14 +31,14 @@ const deleteItem = (req, res, next) => {
   const userId = req.user._id;
   const { itemId } = req.params;
 
-  clothingItem
+  clothingItems
     .findById(itemId)
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== userId) {
         return next(new ForbiddenError("You are not the owner of this item"));
       }
-      return clothingItem.findByIdAndDelete(itemId);
+      return clothingItems.findByIdAndDelete(itemId);
     })
     .then(() => {
       res.json({ message: "Item successfully deleted" });
@@ -55,7 +55,7 @@ const deleteItem = (req, res, next) => {
 };
 
 const likeItem = (req, res, next) => {
-  clothingItem
+  clothingItems
     .findByIdAndUpdate(
       req.params.itemId,
       { $addToSet: { likes: req.user._id } },
@@ -77,7 +77,7 @@ const likeItem = (req, res, next) => {
 };
 
 const dislikeItem = (req, res, next) => {
-  clothingItem
+  clothingItems
     .findByIdAndUpdate(
       req.params.itemId,
       { $pull: { likes: req.user._id } },

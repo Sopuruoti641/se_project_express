@@ -1,9 +1,9 @@
 const router = require("express").Router();
-const authMiddleware = require("../middlewares/auth");
+const authMiddleware = require("../middleware/auth");
 const {
   clothingItemValidation,
   idValidation,
-} = require("../middlewares/validation");
+} = require("../middleware/validation");
 
 const {
   createItem,

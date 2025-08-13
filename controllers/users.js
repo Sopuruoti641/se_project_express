@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const ERROR = require("./errorStatus");
 const { JWT_SECRET } = require("../utils/config");
 
 // Custom error-handlers
@@ -31,7 +30,7 @@ const createUser = (req, res, next) => {
       }
     });
 
-  //((err) => {
+  // ((err) => {
   //   if (err.code === 11000) {
   //     return res
   //       .status(ERROR.CONFLICT)
